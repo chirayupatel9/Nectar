@@ -1,9 +1,10 @@
-import { Palette, Droplet, Contrast, Droplets, Sun, Square, Maximize2, Layers, SwatchBook, Highlighter } from "lucide-react";
+import { Palette, Droplet, Contrast, Droplets, Sun, Square, Maximize2, Layers, SwatchBook, Highlighter, Aperture } from "lucide-react";
 import { SettingRow } from "./SettingRow";
 import { SettingSection } from "./SettingSection";
 import { Dropdown } from "./Dropdown";
 import { useT } from "../i18n";
 import { THEME_PRESETS, hexToHsl, hslToHex, type ThemePreset } from "../theme";
+import { LIVE_BLUR_OPTIONS } from "../liveBlur";
 
 const STYLES = ["solid", "frosted", "liquid", "material"];
 
@@ -28,6 +29,8 @@ interface AppearanceTabProps {
   handleScaleChange: (val: number) => void;
   themeStyle: string;
   handleThemeStyleChange: (style: string) => void;
+  themeLiveBlur: string;
+  handleLiveBlurChange: (value: string) => void;
   themeAccent: string;
   handleAccentChange: (accent: string) => void;
   themeAccentColor: string;
@@ -53,6 +56,8 @@ export function AppearanceTab({
   handleScaleChange,
   themeStyle,
   handleThemeStyleChange,
+  themeLiveBlur,
+  handleLiveBlurChange,
   themeAccent,
   handleAccentChange,
   themeAccentColor,
@@ -105,6 +110,15 @@ export function AppearanceTab({
               ))}
             </div>
             <div className="setting-divider" />
+            {(themeStyle === "frosted" || themeStyle === "liquid") && (
+              <SettingRow icon={Aperture} label={t("appearance.liveBlur")} desc={t("appearance.liveBlur.desc")}>
+                <Dropdown
+                  value={themeLiveBlur}
+                  onChange={handleLiveBlurChange}
+                  options={LIVE_BLUR_OPTIONS.map((value) => ({ value, label: t(`appearance.liveBlur.${value}`) }))}
+                />
+              </SettingRow>
+            )}
           </>
         )}
 

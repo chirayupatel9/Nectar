@@ -129,6 +129,8 @@ function SettingsApp() {
               handleBrightnessChange={settings.handleBrightnessChange}
               themeStyle={settings.themeStyle}
               handleThemeStyleChange={settings.handleThemeStyleChange}
+              themeLiveBlur={settings.themeLiveBlur}
+              handleLiveBlurChange={settings.handleLiveBlurChange}
               themeAccent={settings.themeAccent}
               handleAccentChange={settings.handleAccentChange}
               themeAccentColor={settings.themeAccentColor}

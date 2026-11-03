@@ -210,6 +210,7 @@ export function useSettings() {
     return val !== null ? parseFloat(val) : 0.15;
   });
   const [themeStyle, setThemeStyle] = useState(() => localStorage.getItem("nectar-theme-style") || "solid");
+  const [themeLiveBlur, setThemeLiveBlur] = useState(() => localStorage.getItem("nectar-theme-live-blur") || "off");
   const [themeAccent, setThemeAccent] = useState(() => localStorage.getItem("nectar-theme-accent") || "mono");
   const [themeAccentColor, setThemeAccentColor] = useState(
     () => localStorage.getItem("nectar-theme-accent-color") || DEFAULT_ACCENT_COLOR
@@ -317,6 +318,7 @@ export function useSettings() {
       apply(getVal("nectar-theme-saturation"), setThemeSaturation, parseFloat);
       apply(getVal("nectar-theme-brightness"), setThemeBrightness, parseFloat);
       apply(getVal("nectar-theme-style"), setThemeStyle, (v) => v);
+      apply(getVal("nectar-theme-live-blur"), setThemeLiveBlur, (v) => v);
       apply(getVal("nectar-theme-accent"), setThemeAccent, (v) => v);
       apply(getVal("nectar-theme-accent-color"), setThemeAccentColor, (v) => v);
 
@@ -434,6 +436,7 @@ export function useSettings() {
     "nectar-theme-saturation": setThemeSaturation,
     "nectar-theme-brightness": setThemeBrightness,
     "nectar-theme-style": (v) => setThemeStyle(String(v)),
+    "nectar-theme-live-blur": (v) => setThemeLiveBlur(String(v)),
     "nectar-theme-accent": (v) => setThemeAccent(String(v)),
     "nectar-theme-accent-color": (v) => setThemeAccentColor(String(v)),
     "nectar-weather-city": (v) => {
@@ -992,6 +995,11 @@ export function useSettings() {
     saveSetting("nectar-theme-brightness", String(value));
   };
 
+  const handleLiveBlurChange = (value: string) => {
+    setThemeLiveBlur(value);
+    saveSetting("nectar-theme-live-blur", value);
+  };
+
   const handleThemeStyleChange = (style: string) => {
     setThemeStyle(style);
     saveSetting("nectar-theme-style", style);
@@ -1174,6 +1182,8 @@ export function useSettings() {
     handleBrightnessChange,
     themeStyle,
     handleThemeStyleChange,
+    themeLiveBlur,
+    handleLiveBlurChange,
     themeAccent,
     handleAccentChange,
     themeAccentColor,

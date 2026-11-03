@@ -1,10 +1,12 @@
 import { invoke } from "@tauri-apps/api/core";
 import { setVisibleInterval } from "./hooks/visibleInterval";
+import { liveBlurSetting, liveBlurSupported, startLiveBlur, stopLiveBlur } from "./liveBlur";
 
 // The glass styles show a pre-blurred copy of the desktop wallpaper behind the notch and dock,
 // lined up with where they sit on screen (the windows are transparent, so nothing real can be
 // blurred). When an app window is behind them instead, the wallpaper is hidden and that window
-// shows through the tint.
+// shows through the tint. With Live Blur on, Windows blurs what's really behind them instead
+// (liveBlur.ts) and the wallpaper isn't used at all.
 
 interface WallpaperBackdrop {
   image: string;
@@ -84,9 +86,19 @@ function clearBackdrop(root: HTMLElement) {
 export async function applyBackdrop(root: HTMLElement, style: string) {
   const current = ++generation;
   if (!enabled || !usesBackdrop(style)) {
+    stopLiveBlur();
     clearBackdrop(root);
     return;
   }
+  const live = liveBlurSetting();
+  const canBlur = !!live && (await liveBlurSupported());
+  if (current !== generation) return;
+  if (live && canBlur) {
+    clearBackdrop(root);
+    startLiveBlur(live, !root.classList.contains("light-mode"));
+    return;
+  }
+  stopLiveBlur();
   const d = await invoke<WallpaperBackdrop | null>("get_wallpaper_backdrop", { blur: STYLE_BLUR[style] }).catch(() => null);
   if (current !== generation) return;
   if (!d) {

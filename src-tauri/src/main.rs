@@ -25,6 +25,7 @@ mod memory_saver;
 mod webview_args;
 mod on_demand_windows;
 mod wallpaper;
+mod live_blur;
 
 use tauri::Manager;
 use windows::Win32::System::Console::SetConsoleCtrlHandler;
@@ -206,6 +207,8 @@ fn main() {
             get_system_accent_color,
             wallpaper::get_wallpaper_backdrop,
             wallpaper::is_backdrop_covered,
+            live_blur::live_blur_supported,
+            live_blur::set_live_blur,
             get_monitors,
             get_dock_mode_for_window,
             get_notch_mode_for_window,
